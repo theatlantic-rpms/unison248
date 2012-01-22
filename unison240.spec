@@ -28,7 +28,7 @@
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   4%{?dist}
+Release:   6%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -37,6 +37,11 @@ License:   GPLv3+
 URL:       http://www.cis.upenn.edu/~bcpierce/unison
 Source0:   http://www.cis.upenn.edu/~bcpierce/unison/download/releases/unison-%{version}/unison-%{version}.tar.gz
 Source1:   unison.png
+Source2:   http://www.cis.upenn.edu/~bcpierce/unison/download/releases/unison-%{ver_compat}%{ver_noncompat}/unison-%{ver_compat}%{ver_noncompat}-manual.html
+
+#Add documentation, already fixed in trunk (upstream)
+Patch1:    %{name}-missing-documentation.patch
+
 ExcludeArch:    sparc64 s390 s390x
 
 BuildRequires: ocaml
@@ -66,8 +71,11 @@ Note that this package contains Unison version %{ver_compat}, and
 will never be upgraded to a different major version. Other packages
 exist if you require a different major version.
 
+
 %prep
 %setup -q -n unison-%{version}
+
+%patch1 -p1 -b .documentation
 
 cat > %{name}.desktop <<EOF
 [Desktop Entry]
@@ -82,14 +90,19 @@ StartupNotify=true
 Categories=Utility;
 EOF
 
+
 %build
 make NATIVE=true UISTYLE=gtk2 THREADS=true
+
 
 %install
 mkdir -p %{buildroot}%{_bindir}
 cp -p unison %{buildroot}%{_bindir}/unison-%{ver_compat}
 mkdir -p %{buildroot}%{_datadir}/pixmaps
 cp -p %{SOURCE1} %{buildroot}%{_datadir}/pixmaps/%{name}.png
+
+#additional documentation
+cp -p %{SOURCE2} unison-manual.html
 
 desktop-file-install --dir %{buildroot}%{_datadir}/applications \
     %{name}.desktop
@@ -102,6 +115,7 @@ alternatives \
   %{_bindir}/unison-%{ver_compat} \
   %{ver_priority}
 
+
 %postun
 if [ $1 -eq 0 ]; then
   alternatives --remove unison \
@@ -109,26 +123,33 @@ if [ $1 -eq 0 ]; then
 fi
 exit 0
 
+
 %files
-%defattr(-,root,root,-)
-%doc COPYING NEWS README
+%doc COPYING NEWS README unison-manual.html
 %{_bindir}/unison-%{ver_compat}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
 
+
 %changelog
+* Sun Jan 22 2012 Gregor Tätzner <brummbq@fedoraproject.com> - 2.40.63-6
+- Patch built-in documentation.
+
+* Sat Jan 21 2012 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.63-5
+- Add unison-manual.html.
+
 * Fri Jan 13 2012 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.63-4
-- remove ocaml minimum version
-- add Requires and provides scripts
+- Remove ocaml minimum version.
+- Add Requires and provides scripts.
 
-* Tue Sep 27 2011 Gregor Taetzner <brummbq@fedoraproject.org> - 2.40.63-3
-- vendor tag removed
+* Tue Sep 27 2011 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.63-3
+- Remove vendor tag.
 
-* Sun Sep 04 2011 Gregor Taetzner <gregor@freenet.de> - 2.40.63-2
-- remove xorg-x11-font-utils Requirement
-- enable THREADS=true
+* Sun Sep 04 2011 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.63-2
+- Remove xorg-x11-font-utils Requirement.
+- Enable THREADS=true.
 
-* Thu Aug 30 2011 Gregor Taetzner <gregor@freenet.de> - 2.40.63-1
+* Thu Aug 30 2011 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.63-1
 - Version bump.
 
 * Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.27.57-13
