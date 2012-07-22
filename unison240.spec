@@ -28,7 +28,7 @@
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   6%{?dist}
+Release:   7%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -132,6 +132,9 @@ exit 0
 
 
 %changelog
+* Sun Jul 22 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.40.63-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Sun Jan 22 2012 Gregor Tätzner <brummbq@fedoraproject.com> - 2.40.63-6
 - Patch built-in documentation.
 
