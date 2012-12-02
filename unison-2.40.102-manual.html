@@ -36,7 +36,7 @@ BLOCKQUOTE{margin-left:4ex;margin-right:4ex;text-align:left;}
 <BR>
 <div id="manualheader"><DIV CLASS="center"><FONT SIZE=7><FONT COLOR=black>Unison File Synchronizer</FONT><BR>
 <FONT SIZE=6><FONT COLOR=black>User Manual and Reference Guide</FONT><BR>
-<FONT SIZE=5>Version 2.40.61<BR>
+<FONT SIZE=5>Version 2.40.65<BR>
 <FONT SIZE=4>Copyright 1998-2009, Benjamin C. Pierce
  </FONT></FONT></FONT></FONT></DIV></div><BR>
 <BR>
@@ -105,7 +105,7 @@ BLOCKQUOTE{margin-left:4ex;margin-right:4ex;text-align:left;}
 <A HREF="#ssh"><FONT SIZE=4><B>Installing Ssh</B></FONT></A><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8226;<A HREF="#ssh-unix">Unix</A><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8226;<A HREF="#ssh-win">Windows</A><BR>
-<A HREF="#news"><FONT SIZE=4><B>Changes in Version 2.40.61</B></FONT></A><BR>
+<A HREF="#news"><FONT SIZE=4><B>Changes in Version 2.40.65</B></FONT></A><BR>
 
  </BLOCKQUOTE>
  
@@ -399,7 +399,9 @@ then <TT>su</TT> to root and do <TT>make install</TT>.)<BR>
 <BR>
 You'll also need the GNU <TT>make</TT> utility, standard on many Unix
 systems. (Type <FONT SIZE=4><TT>make &ndash;version</TT></FONT> to check that you've got the
-GNU version.)<BR>
+GNU version.) Unison's build system is
+not parallelizable, so don't use make flags which cause it to start
+processes in parallel, e.g. -j for GNU make.<BR>
 <BR>
 Once you've got OCaml installed, grab a copy of the Unison sources,
 unzip and untar them, change to the new <FONT SIZE=4><TT>unison</TT></FONT> directory, and
@@ -703,9 +705,7 @@ the <A HREF="#socketmeth">Socket Method</A> section, as appropriate.<BR>
 
 The standard remote shell facility on Unix systems is <CODE>ssh</CODE>, which provides the
 same functionality as the older <CODE>rsh</CODE> but much better security. Ssh is available from
-<A HREF="ftp://ftp.cs.hut.fi/pub/ssh/"><TT>ftp://ftp.cs.hut.fi/pub/ssh/</TT></A>; up-to-date binaries for some
-architectures can also be found at
-<A HREF="ftp://ftp.faqs.org/ssh/contrib"><TT>ftp://ftp.faqs.org/ssh/contrib</TT></A>. See section&nbsp;<A HREF="#ssh-win">A.2</A>
+<A HREF="http://www.openssh.org"><TT>http://www.openssh.org</TT></A>. See section&nbsp;<A HREF="#ssh-win">A.2</A>
 for installation instructions for the Windows version.<BR>
 <BR>
 Running
@@ -2144,7 +2144,7 @@ the command.
  state&#8221; of the replicas. (These three options are provided for
  later compatibility with the Harmony data synchronizer.)
 </UL>
-To accomodate the wide variety of programs that users might want to use for
+To accommodate the wide variety of programs that users might want to use for
 merging, Unison checks for several possible situations when the merge
 program exits:
 <UL CLASS="itemize"><LI CLASS="li-itemize">
@@ -2707,9 +2707,9 @@ After the packages are downloaded and installed, the next dialog
 <LI CLASS="li-enumerate">You can now delete the directory <CODE>Foo</CODE> and its contents.
 </OL>
 Some people have reported problems using Cygwin's ssh with Unison. If
-you have trouble, you might try this one instead:
+you have trouble, you might try other ones instead:
 <PRE CLASS="verbatim">
-  http://opensores.thebunker.net/pub/mirrors/ssh/contrib/ssh-1.2.14-win32bin.zip
+  http://linuxmafia.com/ssh/win32.html
 </PRE><BR>
 <BR>
 <LI CLASS="li-enumerate">You must set the environment variables HOME and PATH.
@@ -2753,9 +2753,9 @@ you have trouble, you might try this one instead:
  hosts, provide your remote user name when providing the remote root
  (i.e., <CODE>//username@host/path...</CODE>).
 </OL>
-<hr><!--TOC section Changes in Version 2.40.61-->
+<hr><!--TOC section Changes in Version 2.40.65-->
 
-<H2 CLASS="section"><A NAME="news"></A>Changes in Version 2.40.61</H2><!--SEC END -->
+<H2 CLASS="section"><A NAME="news"></A>Changes in Version 2.40.65</H2><!--SEC END -->
 
 Changes since 2.40.1:
  <UL CLASS="itemize"><LI CLASS="li-itemize">
@@ -4497,7 +4497,7 @@ When a change (deletion or new contents) is propagated onto a
  (We used to change the link itself, which doesn't fit our assertion
  that 'follow' means the link is completely invisible)
  <LI CLASS="li-itemize">When one root did not exist, propagating the other root on top of it
- used to fail, becuase unison could not calculate the working directory
+ used to fail, because unison could not calculate the working directory
  into which to write changes. This should be fixed.
 </UL>
 </UL><BR>
@@ -4594,7 +4594,7 @@ patterns has changed. Instead of putting a line of the form
                  ignore = &lt;regexp&gt;
 </PRE>in your profile (<TT>.unison/default.prf</TT>), you should put:
 <PRE CLASS="verbatim">
-                 ignore = Regexp &lt;regexp&gt;
+                 ignore = Regex &lt;regexp&gt;
 </PRE>Moreover, two other styles of pattern are also recognized:
 <PRE CLASS="verbatim">
                  ignore = Name &lt;name&gt;

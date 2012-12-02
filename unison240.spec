@@ -6,7 +6,7 @@
 # These is the exact upstream version we are packaging
 %define ver_maj 2
 %define ver_min 40
-%define ver_patch 63
+%define ver_patch 102
 
 # All Unison versions sharing ver_compat are compatible
 # Examples are 2.13.15 and 2.13.16 -> ver_compat == 2.13
@@ -28,7 +28,7 @@
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   7%{?dist}
+Release:   1%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -90,6 +90,9 @@ StartupNotify=true
 Categories=Utility;
 EOF
 
+#additional documentation
+cp -a %{SOURCE2} unison-manual.html
+
 
 %build
 make NATIVE=true UISTYLE=gtk2 THREADS=true
@@ -97,12 +100,9 @@ make NATIVE=true UISTYLE=gtk2 THREADS=true
 
 %install
 mkdir -p %{buildroot}%{_bindir}
-cp -p unison %{buildroot}%{_bindir}/unison-%{ver_compat}
+cp -a unison %{buildroot}%{_bindir}/unison-%{ver_compat}
 mkdir -p %{buildroot}%{_datadir}/pixmaps
-cp -p %{SOURCE1} %{buildroot}%{_datadir}/pixmaps/%{name}.png
-
-#additional documentation
-cp -p %{SOURCE2} unison-manual.html
+cp -a %{SOURCE1} %{buildroot}%{_datadir}/pixmaps/%{name}.png
 
 desktop-file-install --dir %{buildroot}%{_datadir}/applications \
     %{name}.desktop
@@ -132,6 +132,10 @@ exit 0
 
 
 %changelog
+* Thu Nov 15 2012 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.102-1
+- 2.40.102
+- fixes incompatibility between unison ocaml3 and ocaml4 builds
+
 * Sun Jul 22 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.40.63-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
