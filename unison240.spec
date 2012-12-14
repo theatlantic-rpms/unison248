@@ -28,7 +28,7 @@
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   1%{?dist}
+Release:   2%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -132,6 +132,9 @@ exit 0
 
 
 %changelog
+* Fri Dec 14 2012 Richard W.M. Jones <rjones@redhat.com> - 2.40.102-2
+- Rebuild for OCaml 4.00.1.
+
 * Thu Nov 15 2012 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.102-1
 - 2.40.102
 - fixes incompatibility between unison ocaml3 and ocaml4 builds
