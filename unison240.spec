@@ -28,7 +28,7 @@
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   2%{?dist}
+Release:   3%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -132,6 +132,9 @@ exit 0
 
 
 %changelog
+* Fri Feb 15 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.40.102-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
 * Fri Dec 14 2012 Richard W.M. Jones <rjones@redhat.com> - 2.40.102-2
 - Rebuild for OCaml 4.00.1.
 
