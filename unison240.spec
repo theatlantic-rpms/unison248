@@ -95,6 +95,9 @@ cp -a %{SOURCE2} unison-manual.html
 
 
 %build
+# MAKEFLAGS=-j<N> breaks the build.
+unset MAKEFLAGS
+
 make NATIVE=true UISTYLE=gtk2 THREADS=true
 
 
