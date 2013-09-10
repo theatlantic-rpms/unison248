@@ -1,8 +1,4 @@
 
-%global _use_internal_dependency_generator 1
-%global __find_requires /usr/lib/rpm/ocaml-find-requires.sh
-%global __find_provides /usr/lib/rpm/ocaml-find-provides.sh
-
 # These is the exact upstream version we are packaging
 %define ver_maj 2
 %define ver_min 40
@@ -28,7 +24,7 @@
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   4%{?dist}
+Release:   5%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -197,6 +193,9 @@ fi
 
 
 %changelog
+* Tue Sep 10 2013 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.102-5
+- fix bogus date in changelog and remove depgen lines
+
 * Mon Sep 09 2013 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.102-4
 - ship 2 versions of unison: text only and gtk2 user interface
 - move binaries into subpackages
@@ -232,7 +231,7 @@ fi
 - Remove xorg-x11-font-utils Requirement.
 - Enable THREADS=true.
 
-* Thu Aug 30 2011 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.63-1
+* Tue Aug 30 2011 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.63-1
 - Version bump.
 
 * Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.27.57-13
@@ -303,7 +302,7 @@ fi
 * Mon May 16 2005 Gerard Milmeister <gemi@bluewin.ch> - 2.10.2-5
 - Patch: http://groups.yahoo.com/group/unison-users/message/3200
 
-* Fri Apr  7 2005 Michael Schwendt <mschwendt[AT]users.sf.net>
+* Thu Apr 7 2005 Michael Schwendt <mschwendt[AT]users.sf.net>
 - rebuilt
 
 * Thu Feb 24 2005 Michael Schwendt <mschwendt[AT]users.sf.net> - 0:2.10.2-2
