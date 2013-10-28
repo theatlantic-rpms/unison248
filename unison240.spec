@@ -1,8 +1,4 @@
 
-%global _use_internal_dependency_generator 0
-%global __find_requires /usr/lib/rpm/ocaml-find-requires.sh
-%global __find_provides /usr/lib/rpm/ocaml-find-provides.sh
-
 # These is the exact upstream version we are packaging
 %define ver_maj 2
 %define ver_min 40
@@ -28,7 +24,7 @@
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   4%{?dist}
+Release:   5%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -42,23 +38,16 @@ Source2:   http://www.cis.upenn.edu/~bcpierce/unison/download/releases/unison-%{
 #Add documentation, already fixed in trunk (upstream)
 Patch1:    %{name}-missing-documentation.patch
 
-ExcludeArch:    sparc64 s390 s390x
+# can't make this noarch (rpmbuild fails about unpackaged debug files)
+# BuildArch:     noarch
+ExcludeArch:   sparc64 s390 s390x
 
 BuildRequires: ocaml
-BuildRequires: ocaml-lablgtk-devel
-BuildRequires: desktop-file-utils
-# for lablgtk
-BuildRequires: gtk2-devel
+
+Requires:   %{name}-ui = %{version}-%{release}
 
 Requires(posttrans): %{_sbindir}/alternatives
 Requires(postun):    %{_sbindir}/alternatives
-
-# Enforce the switch from unison to unisonN.NN
-Obsoletes: unison < 2.27.57-3
-# Let users just install "unison" if they want
-%if 0%{?provide_unison}
-Provides: unison = %{version}-%{release}
-%endif
 
 %description
 Unison is a multi-master file-synchronization tool. It allows two
@@ -72,6 +61,41 @@ will never be upgraded to a different major version. Other packages
 exist if you require a different major version.
 
 
+%package gtk
+
+Summary:   Multi-master File synchronization tool - gtk interface
+
+BuildRequires: ocaml-lablgtk-devel
+BuildRequires: gtk2-devel
+BuildRequires: desktop-file-utils
+
+Requires: %name = %{version}-%{release}
+
+Provides:   %{name}-ui = %{version}-%{release}
+
+# Enforce the switch from unison to unisonN.NN
+Obsoletes: unison < 2.27.57-3
+# Let users just install "unison" if they want
+%if 0%{?provide_unison}
+Provides: unison = %{version}-%{release}
+%endif
+
+%description gtk
+This package provides the graphical version of unison with gtk2 interface.
+
+
+%package text
+
+Summary:   Multi-master File synchronization tool - text interface
+
+Requires: %name = %{version}-%{release}
+
+Provides:   %{name}-ui = %{version}-%{release}
+
+%description text
+This package provides the textual version of unison without graphical interface.
+
+
 %prep
 %setup -q -n unison-%{version}
 
@@ -80,7 +104,7 @@ exist if you require a different major version.
 cat > %{name}.desktop <<EOF
 [Desktop Entry]
 Type=Application
-Exec=unison-%{ver_compat}
+Exec=unison-gtk-%{ver_compat}
 Name=Unison File Synchronizer (version %{ver_compat})
 GenericName=File Synchronizer
 Comment=Multi-master File synchronization tool
@@ -98,19 +122,31 @@ cp -a %{SOURCE2} unison-manual.html
 # MAKEFLAGS=-j<N> breaks the build.
 unset MAKEFLAGS
 
+# we compile 2 versions: gtk2 ui and text ui
 make NATIVE=true UISTYLE=gtk2 THREADS=true
+mv unison unison-gtk
+
+make NATIVE=true UISTYLE=text THREADS=true
+mv unison unison-text
 
 
 %install
 mkdir -p %{buildroot}%{_bindir}
-cp -a unison %{buildroot}%{_bindir}/unison-%{ver_compat}
+
+cp -a unison-gtk %{buildroot}%{_bindir}/unison-gtk-%{ver_compat}
+# symlink for compatibility
+ln -s %{_bindir}/unison-gtk-%{ver_compat} %{buildroot}%{_bindir}/unison-%{ver_compat}
+
+cp -a unison-text %{buildroot}%{_bindir}/unison-text-%{ver_compat}
+
 mkdir -p %{buildroot}%{_datadir}/pixmaps
 cp -a %{SOURCE1} %{buildroot}%{_datadir}/pixmaps/%{name}.png
 
 desktop-file-install --dir %{buildroot}%{_datadir}/applications \
     %{name}.desktop
 
-%posttrans
+
+%posttrans gtk
 alternatives \
   --install \
   %{_bindir}/unison \
@@ -118,23 +154,50 @@ alternatives \
   %{_bindir}/unison-%{ver_compat} \
   %{ver_priority}
 
-
-%postun
+%postun gtk
 if [ $1 -eq 0 ]; then
   alternatives --remove unison \
     %{_bindir}/unison-%{ver_compat}
 fi
-exit 0
+
+
+%posttrans text
+alternatives \
+  --install \
+  %{_bindir}/unison \
+  unison \
+  %{_bindir}/unison-text-%{ver_compat} \
+  %{ver_priority}
+
+
+%postun text
+if [ $1 -eq 0 ]; then
+  alternatives --remove unison \
+    %{_bindir}/unison-text-%{ver_compat}
+fi
 
 
 %files
 %doc COPYING NEWS README unison-manual.html
+
+
+%files gtk
+%{_bindir}/unison-gtk-%{ver_compat}
 %{_bindir}/unison-%{ver_compat}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
 
 
+%files text
+%{_bindir}/unison-text-%{ver_compat}
+
+
 %changelog
+* Mon Sep 09 2013 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.102-5
+- ship 2 versions of unison: text only and gtk2 user interface
+- move binaries into subpackages
+- enable dependency generator
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.40.102-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
@@ -168,7 +231,7 @@ exit 0
 - Remove xorg-x11-font-utils Requirement.
 - Enable THREADS=true.
 
-* Thu Aug 30 2011 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.63-1
+* Tue Aug 30 2011 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.63-1
 - Version bump.
 
 * Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.27.57-13
@@ -239,7 +302,7 @@ exit 0
 * Mon May 16 2005 Gerard Milmeister <gemi@bluewin.ch> - 2.10.2-5
 - Patch: http://groups.yahoo.com/group/unison-users/message/3200
 
-* Fri Apr  7 2005 Michael Schwendt <mschwendt[AT]users.sf.net>
+* Thu Apr 7 2005 Michael Schwendt <mschwendt[AT]users.sf.net>
 - rebuilt
 
 * Thu Feb 24 2005 Michael Schwendt <mschwendt[AT]users.sf.net> - 0:2.10.2-2
