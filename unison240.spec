@@ -145,6 +145,9 @@ cp -a %{SOURCE1} %{buildroot}%{_datadir}/pixmaps/%{name}.png
 desktop-file-install --dir %{buildroot}%{_datadir}/applications \
     %{name}.desktop
 
+# create/own alternatives target
+touch %{buildroot}%{_bindir}/unison
+
 
 %posttrans gtk
 alternatives \
@@ -182,6 +185,7 @@ fi
 
 
 %files gtk
+%ghost %{_bindir}/unison
 %{_bindir}/unison-gtk-%{ver_compat}
 %{_bindir}/unison-%{ver_compat}
 %{_datadir}/applications/%{name}.desktop
@@ -189,10 +193,14 @@ fi
 
 
 %files text
+%ghost %{_bindir}/unison
 %{_bindir}/unison-text-%{ver_compat}
 
 
 %changelog
+* Wed Jan 01 2014 Rex Dieter <rdieter@fedoraproject.org> - 2.40.102-6
+- own alternatives target
+
 * Mon Sep 09 2013 Gregor Tätzner <brummbq@fedoraproject.org> - 2.40.102-5
 - ship 2 versions of unison: text only and gtk2 user interface
 - move binaries into subpackages
