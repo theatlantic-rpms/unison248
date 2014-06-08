@@ -24,7 +24,7 @@
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   6%{?dist}
+Release:   7%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -198,6 +198,9 @@ fi
 
 
 %changelog
+* Sun Jun 08 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.40.102-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Wed Jan 01 2014 Rex Dieter <rdieter@fedoraproject.org> - 2.40.102-6
 - own alternatives target
 
