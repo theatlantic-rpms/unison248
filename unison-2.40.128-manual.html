@@ -36,7 +36,7 @@ BLOCKQUOTE{margin-left:4ex;margin-right:4ex;text-align:left;}
 <BR>
 <div id="manualheader"><DIV CLASS="center"><FONT SIZE=7><FONT COLOR=black>Unison File Synchronizer</FONT><BR>
 <FONT SIZE=6><FONT COLOR=black>User Manual and Reference Guide</FONT><BR>
-<FONT SIZE=5>Version 2.40.65<BR>
+<FONT SIZE=5>Version 2.40.128<BR>
 <FONT SIZE=4>Copyright 1998-2009, Benjamin C. Pierce
  </FONT></FONT></FONT></FONT></DIV></div><BR>
 <BR>
@@ -105,7 +105,7 @@ BLOCKQUOTE{margin-left:4ex;margin-right:4ex;text-align:left;}
 <A HREF="#ssh"><FONT SIZE=4><B>Installing Ssh</B></FONT></A><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8226;<A HREF="#ssh-unix">Unix</A><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8226;<A HREF="#ssh-win">Windows</A><BR>
-<A HREF="#news"><FONT SIZE=4><B>Changes in Version 2.40.65</B></FONT></A><BR>
+<A HREF="#news"><FONT SIZE=4><B>Changes in Version 2.40.128</B></FONT></A><BR>
 
  </BLOCKQUOTE>
  
@@ -1694,7 +1694,7 @@ Including the preference <TT>nocreationpartial = <I>PATHSPEC</I></TT><TT> -&gt; 
 <DT CLASS="dt-description"><B>nodeletion <TT>xxx</TT></B><DD CLASS="dd-description">
 Including the preference <TT>-nodeletion <I>root</I></TT> prevents Unison from performing any file deletion on root <TT><I>root</I></TT>.<BR>
 <BR>
-This preference can be included twice, once for each root, if you want to prevent any creation.<BR>
+This preference can be included twice, once for each root, if you want to prevent any deletion.<BR>
 <BR>
 <DT CLASS="dt-description"><B>nodeletionpartial <TT>xxx</TT></B><DD CLASS="dd-description">
 Including the preference <TT>nodeletionpartial = <I>PATHSPEC</I></TT><TT> -&gt; <I>root</I></TT> prevents Unison from performing any file deletion in <TT><I>PATHSPEC</I></TT> on root <TT><I>root</I></TT> (see the <A HREF="#pathspec">Path Specification</A> section for more information). It is recommended to use <TT>BelowPath</TT> patterns when selecting a directory and all its contents.<BR>
@@ -2753,9 +2753,9 @@ you have trouble, you might try other ones instead:
  hosts, provide your remote user name when providing the remote root
  (i.e., <CODE>//username@host/path...</CODE>).
 </OL>
-<hr><!--TOC section Changes in Version 2.40.65-->
+<hr><!--TOC section Changes in Version 2.40.128-->
 
-<H2 CLASS="section"><A NAME="news"></A>Changes in Version 2.40.65</H2><!--SEC END -->
+<H2 CLASS="section"><A NAME="news"></A>Changes in Version 2.40.128</H2><!--SEC END -->
 
 Changes since 2.40.1:
  <UL CLASS="itemize"><LI CLASS="li-itemize">

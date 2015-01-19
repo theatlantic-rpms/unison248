@@ -2,7 +2,7 @@
 # These is the exact upstream version we are packaging
 %define ver_maj 2
 %define ver_min 40
-%define ver_patch 102
+%define ver_patch 128
 
 # All Unison versions sharing ver_compat are compatible
 # Examples are 2.13.15 and 2.13.16 -> ver_compat == 2.13
@@ -24,7 +24,7 @@
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   8%{?dist}
+Release:   1%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -34,9 +34,6 @@ URL:       http://www.cis.upenn.edu/~bcpierce/unison
 Source0:   http://www.cis.upenn.edu/~bcpierce/unison/download/releases/unison-%{version}/unison-%{version}.tar.gz
 Source1:   unison.png
 Source2:   http://www.cis.upenn.edu/~bcpierce/unison/download/releases/unison-%{ver_compat}%{ver_noncompat}/unison-%{ver_compat}%{ver_noncompat}-manual.html
-
-#Add documentation, already fixed in trunk (upstream)
-Patch1:    %{name}-missing-documentation.patch
 
 # can't make this noarch (rpmbuild fails about unpackaged debug files)
 # BuildArch:     noarch
@@ -98,8 +95,6 @@ This package provides the textual version of unison without graphical interface.
 
 %prep
 %setup -q -n unison-%{version}
-
-%patch1 -p1 -b .documentation
 
 cat > %{name}.desktop <<EOF
 [Desktop Entry]
@@ -198,6 +193,10 @@ fi
 
 
 %changelog
+* Mon Jan 19 2015 Richard W.M. Jones <rjones@redhat.com> - 2.40.128-1
+- New upstream version 2.40.128 (RHBZ#1178444).
+- Remove missing documentation patch, now included upstream.
+
 * Mon Aug 18 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.40.102-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
