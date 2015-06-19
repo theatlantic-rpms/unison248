@@ -24,7 +24,7 @@
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   1%{?dist}
+Release:   2%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -193,6 +193,9 @@ fi
 
 
 %changelog
+* Fri Jun 19 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.40.128-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Mon Jan 19 2015 Richard W.M. Jones <rjones@redhat.com> - 2.40.128-1
 - New upstream version 2.40.128 (RHBZ#1178444).
 - Remove missing documentation patch, now included upstream.
