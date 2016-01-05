@@ -1,30 +1,30 @@
 
 # These is the exact upstream version we are packaging
-%define ver_maj 2
-%define ver_min 40
-%define ver_patch 128
+%global ver_maj 2
+%global ver_min 40
+%global ver_patch 128
 
 # All Unison versions sharing ver_compat are compatible
 # Examples are 2.13.15 and 2.13.16 -> ver_compat == 2.13
 # In older versions, even patch levels were not compatible
 # Examples are ver_compat==2.9.0 and ver_compat==2.9.1
-%define ver_compat      %{ver_maj}.%{ver_min}
-%define ver_compat_name %{ver_maj}%{ver_min}
-%define ver_noncompat   .%{ver_patch}
+%global ver_compat      %{ver_maj}.%{ver_min}
+%global ver_compat_name %{ver_maj}%{ver_min}
+%global ver_noncompat   .%{ver_patch}
 
 # ver_priority is the first component of ver_compat, catenated with the second
 # component of ver_compat zero-filled to 3 digits, catenated with a final
 # zero-filled 3-digit field. The final field contains the 3rd component of
 # ver_compat (if there is one), otherwise 0.
-%define ver_priority %(printf %%d%%03d%%03d `echo %{ver_compat}|sed 's/\\./ /g'`)
+%global ver_priority %(printf %%d%%03d%%03d `echo %{ver_compat}|sed 's/\\./ /g'`)
 
 # Is this package the unisonNNN package with the highest ${ver_compat}
 # available in this Fedora branch/release? If so, we provide unison.
-%define provide_unison 1
+%global provide_unison 1
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   2%{?dist}
+Release:   3%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -193,6 +193,9 @@ fi
 
 
 %changelog
+* Tue Jan 05 2016 Richard Jones <rjones@redhat.com> - 2.40.128-3
+- Use global instead of define.
+
 * Fri Jun 19 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.40.128-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
