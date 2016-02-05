@@ -24,7 +24,7 @@
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   3%{?dist}
+Release:   4%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -193,6 +193,9 @@ fi
 
 
 %changelog
+* Fri Feb 05 2016 Fedora Release Engineering <releng@fedoraproject.org> - 2.40.128-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
 * Tue Jan 05 2016 Richard Jones <rjones@redhat.com> - 2.40.128-3
 - Use global instead of define.
 
