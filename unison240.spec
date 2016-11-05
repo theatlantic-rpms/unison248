@@ -24,7 +24,7 @@
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   4%{?dist}
+Release:   5%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -193,6 +193,9 @@ fi
 
 
 %changelog
+* Sat Nov 05 2016 Richard W.M. Jones <rjones@redhat.com> - 2.40.128-5
+- Rebuild for OCaml 4.04.0.
+
 * Fri Feb 05 2016 Fedora Release Engineering <releng@fedoraproject.org> - 2.40.128-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
