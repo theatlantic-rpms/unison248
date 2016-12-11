@@ -1,8 +1,9 @@
+%bcond_with gtk  # We don't have a need for the gui client
 
 # These is the exact upstream version we are packaging
 %global ver_maj 2
-%global ver_min 40
-%global ver_patch 128
+%global ver_min 48
+%global ver_patch 4
 
 # All Unison versions sharing ver_compat are compatible
 # Examples are 2.13.15 and 2.13.16 -> ver_compat == 2.13
@@ -24,7 +25,7 @@
 
 Name:      unison%{ver_compat_name}
 Version:   %{ver_compat}%{ver_noncompat}
-Release:   5%{?dist}
+Release:   1%{?dist}
 
 Summary:   Multi-master File synchronization tool
 
@@ -33,7 +34,7 @@ License:   GPLv3+
 URL:       http://www.cis.upenn.edu/~bcpierce/unison
 Source0:   http://www.cis.upenn.edu/~bcpierce/unison/download/releases/unison-%{version}/unison-%{version}.tar.gz
 Source1:   unison.png
-Source2:   http://www.cis.upenn.edu/~bcpierce/unison/download/releases/unison-%{ver_compat}%{ver_noncompat}/unison-%{ver_compat}%{ver_noncompat}-manual.html
+Source2:   http://www.cis.upenn.edu/~bcpierce/unison/download/releases/unison-%{version}/unison-%{version}-manual.html
 
 # can't make this noarch (rpmbuild fails about unpackaged debug files)
 # BuildArch:     noarch
@@ -58,6 +59,7 @@ will never be upgraded to a different major version. Other packages
 exist if you require a different major version.
 
 
+%if %{with gtk}
 %package gtk
 
 Summary:   Multi-master File synchronization tool - gtk interface
@@ -79,7 +81,7 @@ Provides: unison = %{version}-%{release}
 
 %description gtk
 This package provides the graphical version of unison with gtk2 interface.
-
+%endif
 
 %package text
 
@@ -94,8 +96,9 @@ This package provides the textual version of unison without graphical interface.
 
 
 %prep
-%setup -q -n unison-%{version}
+%setup -q -n src
 
+%if %{with gtk}
 cat > %{name}.desktop <<EOF
 [Desktop Entry]
 Type=Application
@@ -108,6 +111,7 @@ Icon=%{name}
 StartupNotify=true
 Categories=Utility;
 EOF
+%endif
 
 #additional documentation
 cp -a %{SOURCE2} unison-manual.html
@@ -118,8 +122,10 @@ cp -a %{SOURCE2} unison-manual.html
 unset MAKEFLAGS
 
 # we compile 2 versions: gtk2 ui and text ui
+%if %{with gtk}
 make NATIVE=true UISTYLE=gtk2 THREADS=true
 mv unison unison-gtk
+%endif
 
 make NATIVE=true UISTYLE=text THREADS=true
 mv unison unison-text
@@ -128,22 +134,25 @@ mv unison unison-text
 %install
 mkdir -p %{buildroot}%{_bindir}
 
+cp -a unison-text %{buildroot}%{_bindir}/unison-text-%{ver_compat}
+
+%if %{with gtk}
 cp -a unison-gtk %{buildroot}%{_bindir}/unison-gtk-%{ver_compat}
 # symlink for compatibility
 ln -s %{_bindir}/unison-gtk-%{ver_compat} %{buildroot}%{_bindir}/unison-%{ver_compat}
-
-cp -a unison-text %{buildroot}%{_bindir}/unison-text-%{ver_compat}
 
 mkdir -p %{buildroot}%{_datadir}/pixmaps
 cp -a %{SOURCE1} %{buildroot}%{_datadir}/pixmaps/%{name}.png
 
 desktop-file-install --dir %{buildroot}%{_datadir}/applications \
     %{name}.desktop
+%endif
 
 # create/own alternatives target
 touch %{buildroot}%{_bindir}/unison
 
 
+%if %{with gtk}
 %posttrans gtk
 alternatives \
   --install \
@@ -157,7 +166,7 @@ if [ $1 -eq 0 ]; then
   alternatives --remove unison \
     %{_bindir}/unison-%{ver_compat}
 fi
-
+%endif
 
 %posttrans text
 alternatives \
@@ -178,14 +187,14 @@ fi
 %files
 %doc COPYING NEWS README unison-manual.html
 
-
+%if %{with gtk}
 %files gtk
 %ghost %{_bindir}/unison
 %{_bindir}/unison-gtk-%{ver_compat}
 %{_bindir}/unison-%{ver_compat}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
-
+%endif
 
 %files text
 %ghost %{_bindir}/unison
@@ -193,6 +202,9 @@ fi
 
 
 %changelog
+* Sat Dec 10 2016 Frankie Dintino <fdintino@gmail.com> - 2.48.4-1
+- New upstream version 2.48.4
+
 * Sat Nov 05 2016 Richard W.M. Jones <rjones@redhat.com> - 2.40.128-5
 - Rebuild for OCaml 4.04.0.
 
